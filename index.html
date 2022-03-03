@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="description" content="Vue.js hangman">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+	<!--CDN reference to the Normalize CSS library hosted on Cloudfare-->
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+	<!--reference to my own CSS file-->
+	<link rel="stylesheet" type="text/css" href="./CSS/style.css">
+	<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+	<title>Hangman Game - Brought To You By Vue</title>
+</head>
+<body>
+	<div id="app">
+		<!--canvas where the hangman is drawn piece by piece as the game progresses-->
+		<div id="board">
+			<canvas id="board-canvas"></canvas>
+		</div>
+
+		<!--Row of blank slots for letters of the word-->
+		<div id="word">
+			<div class="word-blankletter" v-for="letter in wordDivs" v-cloak>{{ letter }}</div>
+		</div>
+
+		<!--keyboard-->
+		<div id="keyboard">
+			<div v-for="row in letters" class="keyboard-row">
+				<letter-button v-for="letter in row" :letter="letter" :game-over="gameOver" :two-players="twoPlayers" :key="letter" @check="check(letter)" v-cloak></letter-button>
+			</div>
+		</div>
+
+		<!--Buttons for choosing one player, two players, or play again-->
+		<div id="buttons">
+			<button class="buttons-button" :class="{ orange: !twoPlayers }" @click="onePlayer">One Player</button>
+			<button class="buttons-button" :class="{ orange: twoPlayers }" @click="twoPlayer">Two Players</button>
+			<button id="playagain" class="buttons-button" :class="{ hidden: !gameOver }" @click="playAgain">Play Again?</button>
+		</div>
+	</div>
+
+	<!--CDN reference to the Vue javascript library hosted on Cloudfare-->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.1/vue.min.js"></script>
+	<!--reference to my own Javascript file-->
+	<script src="./js/hangman.js"></script>
+</body>
+</html>
