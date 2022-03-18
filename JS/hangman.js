@@ -1,12 +1,10 @@
 /*function for getting a random number */
-function randomInteger(min, max)
-{
+function randomInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /*Vue component for a keyboard letter button*/
-Vue.component("letter-button",
-{
+Vue.component("letter-button", {
 	props: ["letter", "gameOver", "twoPlayers"],
 	//defines the HTML element to append onto the webpage
 	template: "<button class='keyboard-row-letter' :id='letter' :disabled='disabled' @click='clicked()'>{{ letter }}</button>",
@@ -17,45 +15,37 @@ Vue.component("letter-button",
 	},
 	methods: {
 		//function to disable the button when clicked, and send "check" event to run the "check()" method in the main Vue instance
-		clicked: function()
-		{
+		clicked: function() {
 			this.disabled = true;
 			this.$emit("check");
 		}
 	},
-	watch:
-	{
+	watch: {
 		/*this function disables all the buttons when getting a game over, and also
 		re-enables all buttons upon restarting the game*/
-		gameOver: function(newValue)
-		{
+		gameOver: function(newValue) {
 			this.disabled = newValue;
 		},
 		//this function re-enables all buttons when a new two-player game is started
-		twoPlayers: function(newValue)
-		{
+		twoPlayers: function(newValue) {
 			this.disabled = false;
 		}
 	}
 })
 
 //main instance of the Vue app
-var app = new Vue
-({
+var app = new Vue({
 	el: "#app",
 	//defines the pieces of data used throughout the Vue app; think of them like properties
-	data:
-	{
+	data: {
 		//2d array holding the keyboard letters
-		letters:
-		[
+		letters: [
 			["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
 			["A", "S", "D", "F", "G", "H", "J", "K", "L"],
 			["Z", "X", "C", "V", "B", "N", "M"]
 		],
 		//array holding the words to choose from
-		words:
-		[
+		words: [
 			"BUTTERCUP",
 			"TANSY",
 			"PIGEON",
@@ -95,11 +85,9 @@ var app = new Vue
 	},
 
 	//defines the functions of the main Vue app
-	methods:
-	{
+	methods: {
 		//function that draws the gallows on the webpage. takes in the "ctx" 2d context of the canvas
-		drawGallows: function(ctx)
-		{
+		drawGallows: function(ctx) {
 			//clears anything currently on the canvas
 			ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			//defines the fill color of the drawing
@@ -122,32 +110,27 @@ var app = new Vue
 		},
 
 		//function that fills the "wordDivs" with empty strings to create orange blanks for each letter
-		makeBlanks: function() 
-		{
+		makeBlanks: function() {
 			//iterates through each character in the "currentWord" variable
-			for (var i = 0; i < this.currentWord.length; i++)
-			{
+			for (var i = 0; i < this.currentWord.length; i++) {
 				this.wordDivs.push("");
 			}
 		},
 
 		/*function that updates the canvas over time by drawing the appropriate part of the hanging man,
 		and also handles if a game over occurs in the event the entire man is drawn*/
-		updateCanvas: function(ctx)
-		{
+		updateCanvas: function(ctx) {
 			//this.drawGallows(ctx);
 
 			//if the user hasn't made any incorrect guesses yet, draw the head
-			if (this.guesses === 0)
-			{
+			if (this.guesses === 0) {
 				ctx.beginPath();
 				ctx.arc(this.canvas.width * 0.4, (this.canvas.height / 5) + 20, 20, 0, 2 * Math.PI);
 				ctx.stroke();
 				ctx.closePath();
 			}
 			//otherwise, if the user has made 1 incorrect guess, draw the torso
-			else if (this.guesses === 1)
-			{
+			else if (this.guesses === 1) {
 				ctx.beginPath();
 				ctx.moveTo(this.canvas.width * 0.4, (this.canvas.height / 5) + 40);
 				ctx.lineTo(this.canvas.width * 0.4, this.canvas.height / 2);
@@ -155,8 +138,7 @@ var app = new Vue
 				ctx.closePath();
 			}
 			//otherwise, if the user has made 2 incorrect guesses, draw the right leg
-			else if (this.guesses === 2)
-			{
+			else if (this.guesses === 2) {
 				ctx.beginPath();
 				ctx.moveTo(this.canvas.width * 0.4, this.canvas.height / 2);
 				ctx.lineTo((this.canvas.width * 0.4) + 30, this.canvas.height * 0.7);
@@ -164,17 +146,15 @@ var app = new Vue
 				ctx.closePath();
 			}
 			//otherwise, if the user has made 3 incorrect guesses, draw the left leg
-			else if (this.guesses === 3)
-			{
+			else if (this.guesses === 3) {
 				ctx.beginPath();
 				ctx.moveTo(this.canvas.width * 0.4, this.canvas.height / 2);
-				ctx.lineTo((this.canvas.width * 0.4) - 30, this.canvas.height + 0.7);
+				ctx.lineTo((this.canvas.width * 0.4) - 30, this.canvas.height * 0.7);
 				ctx.stroke();
 				ctx.closePath();
 			}
-			//otherwise, if the user has made 4 incorrect guesses, draw the right leg
-			else if (this.guesses === 4)
-			{
+			//otherwise, if the user has made 4 incorrect guesses, draw the right arm
+			else if (this.guesses === 4) {
 				ctx.beginPath();
 				ctx.moveTo(this.canvas.width * 0.4, (this.canvas.height / 5) + 55);
 				ctx.lineTo((this.canvas.width * 0.4) + 35, (this.canvas.height / 2) + 10);
@@ -182,8 +162,7 @@ var app = new Vue
 				ctx.closePath();
 			}
 			//otherwise, if the user has made 5 incorrect guesses, draw the left arm and end the games
-			else if (this.guesses === 5)
-			{
+			else if (this.guesses === 5) {
 				ctx.beginPath();
 				ctx.moveTo(this.canvas.width * 0.4, (this.canvas.height / 5) + 55);
 				ctx.lineTo((this.canvas.width * 0.4) - 35, (this.canvas.height / 2) + 10);
@@ -191,15 +170,14 @@ var app = new Vue
 				ctx.closePath();
 
 				//chooses a font for the game over message
-				ctx.font = "24px Roboto, sans-serifI";
+				ctx.font = "24px Roboto, sans-serif";
 				//displays the game over message
 				ctx.fillText("Game Over Man, Game Over!", this.canvas.width * 0.4 - 30, this.canvas.height * 0.9);
 				//specifies that the game has ended and the player has lost
 				this.gameOver = true;
 				this.lose = true;
 
-				for (var i = 0; i < this.currentWord.length; i++)
-				{
+				for (var i = 0; i < this.currentWord.length; i++) {
 					Vue.set(this.wordDivs, i, this.currentWord[i]);
 				}
 			}
@@ -208,17 +186,13 @@ var app = new Vue
 		},
 
 		//function to check the chosen letter when a letter component emits 'check'
-		check: function(letter)
-		{
-			if (!this.gameOver)
-			{
+		check: function(letter) {
+			if (!this.gameOver) {
 				var guessCorrect = false;
 				//iterates through the letters in the word
-				for (var i = 0; i < this.currentWord.length; i++)
-				{
+				for (var i = 0; i < this.currentWord.length; i++) {
 					//if the user's chosen letter matches with the current letter in the word, fill it in
-					if (letter == this.currentWord[i])
-					{
+					if (letter == this.currentWord[i]) {
 						//fills in the letter in the word
 						Vue.set(this.wordDivs, i, letter);
 						//determines that the player has correctly guessed a letter
@@ -227,8 +201,7 @@ var app = new Vue
 				}
 
 				//if there are no more blanks in the word, the player wins
-				if (this.wordDivs.some(function(value) { return value == "" }))
-				{
+				if (!this.wordDivs.some(function(value) { return value == "" })) {
 					//determines that the game is over
 					this.gameOver = true;
 					//chooses a font for the winning message
@@ -237,16 +210,14 @@ var app = new Vue
 					this.ctx.fillText("Congratulations, you won! Click here for a free iPhone!", this.canvas.width * 0.4 - 30, this.canvas.height * 0.9);
 				}
 				//if they guess wrong, call the "updateCanvas" function to draw the man
-				if (!guessCorrect)
-				{
+				if (!guessCorrect) {
 					this.updateCanvas(this.ctx);
 				}
 			}
 		},
 
 		//function to re-initialize the game
-		restart: function()
-		{
+		restart: function() {
 			//resets all the aspects of the game app
 			this.gameOver = false;
 			this.lose = false;
@@ -259,11 +230,9 @@ var app = new Vue
 		},
 
 		//function to start the game to one-player mode and choose a new word
-		onePlayer: function()
-		{
+		onePlayer: function() {
 			//if the game move is currently two-player...
-			if (this.twoPlayers == true)
-			{
+			if (this.twoPlayers == true) {
 				//determines that the game is not two-player anymore
 				this.twoPlayers = false;
 				//chooses a random word from the list of possible words
@@ -273,10 +242,8 @@ var app = new Vue
 		},
 
 		//function to start the game in two-player mode and prompt the user to enter a word
-		twoPlayer: function()
-		{
-			if (!this.twoPlayers)
-			{
+		twoPlayer: function() {
+			if (!this.twoPlayers) {
 				//determines that the game is over
 				this.gameOver = true;
 				//determines that the game is in two-player mode
@@ -284,13 +251,11 @@ var app = new Vue
 				this.wordDivs.splice(0);
 
 				//attempts to read user input for a word
-				try
-				{
+				try {
 					this.currentWord = prompt("Enter a word!").toUpperCase();
 				}
 				//if an exception occurs, such as the user inputs something invalid...
-				catch (e)
-				{
+				catch (e) {
 					//calls the function to make the game one-player
 					this.onePlayer();
 					return;
@@ -298,16 +263,13 @@ var app = new Vue
 				//a collection of all alphabetical characters, uppercase and lowercase
 				var letters = /^[A-Za-z]+$/;
 				//if the user input contains characters that are not letters...
-				while (!letters.test(this.currentWord))
-				{
+				while (!letters.test(this.currentWord)) {
 					//attempts to read user input for a word again
-					try
-					{
+					try {
 						this.currentWord = prompt("Only letters please! Enter a word: ").toUpperCase();
 					}
 					//if an exception occurs...
-					catch(e)
-					{
+					catch(e) {
 						//calls the function to make the game one-player
 						this.onePlayer();
 						return;
@@ -317,19 +279,15 @@ var app = new Vue
 			}
 		},
 
-		playAgain: function()
-		{
+		playAgain: function() {
 			//if the game mode is currently two-player...
-			if (this.twoPlayers == true)
-			{
+			if (this.twoPlayers == true) {
 				//attempts to read user input for a word
-				try
-				{
+				try {
 					this.currentWord = prompt("Enter a word!").toUpperCase();
 				}
 				//if an exception occurs, such as the user inputs something invalid...
-				catch (e)
-				{
+				catch (e) {
 					//calls the function to make the game one-player
 					this.onePlayer();
 					return;
@@ -337,16 +295,13 @@ var app = new Vue
 				//a collection of all alphabetical characters, uppercase and lowercase
 				var letters = /^[A-Za-z]+$/;
 				//if the user input contains characters that are not letters...
-				while (!letters.test(this.currentWord))
-				{
+				while (!letters.test(this.currentWord)) {
 					//attempts to read user input for a word again
-					try
-					{
+					try {
 						this.currentWord = prompt("Only letters please! Enter a word: ").toUpperCase();
 					}
 					//if an exception occurs...
-					catch(e)
-					{
+					catch(e) {
 						//calls the function to make the game one-player
 						this.onePlayer();
 						return;
@@ -354,8 +309,7 @@ var app = new Vue
 				}
 			}
 			//otherwise, if the game mode is not currently two-player...
-			else
-			{
+			else {
 				this.currentWord = this.words[randomInteger(0, this.words.length - 1)];
 			}
 			this.restart();
@@ -363,8 +317,7 @@ var app = new Vue
 	},
 
 	//function to identify the canvas element and initialize it, draw the gallows, choose a word, and draw the blanks
-	mounted: function()
-	{
+	mounted: function() {
 		this.canvas = document.getElementById("board-canvas");
 		this.canvas.width = document.getElementById("board").offsetWidth;
 		this.canvas.height = document.getElementById("board").offsetHeight;
